@@ -59,7 +59,7 @@ extern Remote_Handle_t Remote_Control; //取出遥控器数据
 #define KEY_RISING_EDGE(cur, last, field)  ((cur.field == 1) && (last.field == 0))
 
 void Task_Init(void);
-void Send_Action();
+void Send_Action(uint8_t my_data);
 #endif
 
 

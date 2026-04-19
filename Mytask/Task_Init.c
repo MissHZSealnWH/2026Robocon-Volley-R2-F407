@@ -28,7 +28,7 @@ void Task_Init(){
    __HAL_DMA_DISABLE_IT(huart5.hdmarx, DMA_IT_HT);
 
 	 //F407”ÎH723Õ®–≈
-	
+
 
 	vPortEnterCritical();
 	
@@ -48,7 +48,7 @@ void Task_Init(){
 				
 	xTaskCreate(Control_Remote,
 			 "Control_Remote",
-				312,
+				450,
 				NULL,
 				3,
 				&Control_Remote_Handle); 
@@ -63,13 +63,18 @@ void Task_Init(){
 	vPortExitCritical();
 	
 }
-
-void Send_Action()
+void Send_Action(uint8_t my_data)
 {
-    uint8_t tx[3] = {FRAME_HEAD, ACTION_CMD, FRAME_TAIL};
+    static uint8_t tx[3];
+		tx[0] = FRAME_HEAD;
+		tx[1] = my_data;
+		tx[2] = FRAME_TAIL;
+		
 
     if(HAL_UART_GetState(&huart4) == HAL_UART_STATE_READY)
     {
-        HAL_UART_Transmit_DMA(&huart4, tx, 3);
+        HAL_UART_Transmit_DMA(&huart4, tx, sizeof(tx));
     }
 }
+
+	
