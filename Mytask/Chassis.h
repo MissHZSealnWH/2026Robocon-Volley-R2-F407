@@ -49,8 +49,6 @@ void Move_Remote(void *pvParameters);
 void Control_Remote(void *pvParameters);
 void Ball_back(void *pvParameters);
 
-uint8_t GetDriverID(uint16_t std_id);
-int32_t RAMP_slf( int32_t final, int32_t now, int32_t ramp );
-bool is_remote_active(void);
+
 
 #endif

@@ -16,9 +16,9 @@ void Task_Init(){
 	HAL_CAN_Start(&hcan1);
 	HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING);
 	
-//	CanFilter_Init(&hcan2);
-//	HAL_CAN_Start(&hcan2);
-//	HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO1_MSG_PENDING);
+	CanFilter_Init(&hcan2);
+	HAL_CAN_Start(&hcan2);
+	HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO1_MSG_PENDING);
 	
 	RS485Init(&rs485bus, &huart6, GPIOA, GPIO_PIN_4);// 初始化485总线管理器
 	

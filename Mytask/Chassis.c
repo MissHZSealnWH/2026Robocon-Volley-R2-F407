@@ -191,6 +191,7 @@ void Remote(void *pvParameters)
 	}
 }
 
+
 //Ò£¿ØÆ÷ÈÎÎñ
 static hw_key_t last_key;
 TaskHandle_t Control_Remote_Handle;
@@ -201,12 +202,12 @@ void Control_Remote(void *pvParameters)
 		Remote_Analysis();
 		
 		if(KEY_RISING_EDGE(Remote_Control.First, last_key, Right_Key_Up))
+
     {
-        Send_Action();
+        Send_Action(ACTION_CMD);
     }
 		last_key = Remote_Control.First;
 		
-		vTaskDelay(1); 
 	 }
 }
 
