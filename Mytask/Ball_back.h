@@ -21,20 +21,27 @@ typedef struct
 	float kd;
 }RobStride_Reset;
 
-
 //左电机
 typedef struct
 {
 	PID2 pos_pid;
-	PID2 speed_pid;
+	PID2 vel_pid;
 }R_left_PID;
 
 //右电机
 typedef struct
 {
 	PID2 pos_pid;
-	PID2 speed_pid;
+	PID2 vel_pid;
 }R_right_PID;
+
+typedef enum {
+    READY,//等待
+    ALIGN,//复位
+    FIRE, //击球
+    PLAN  //轨迹开始规划
+} IFState;
+
 
 #endif
 

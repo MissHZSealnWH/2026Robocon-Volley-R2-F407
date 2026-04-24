@@ -5,6 +5,8 @@
 #include "motorEx.h"
 #include "task.h"
 
+IFState ALLState = READY;
+
 extern RM3508_TypeDef Rm3508;
 
 RobStride_Expect R_left_expect = {
@@ -26,14 +28,14 @@ RobStride_Expect R_right_expect = {
 RobStride_Reset R_left_reset = {
 	.reset_angle = 0.0f,
 	.reset_omega = 0.0f,
-	.reset_torque = 0.0f,
+	.reset_torque = 0.3f,
 	.kp = 10.0f,
 	.kd = 1.0f
 };
 RobStride_Reset R_right_reset = {
 	.reset_angle = 0.0f,
 	.reset_omega = 0.0f,
-	.reset_torque = 0.0f,
+	.reset_torque = -0.3f,
 	.kp = 10.0f,
 	.kd = 1.0f
 };
@@ -47,14 +49,10 @@ CubicParam_t traj_right;
 TrajectoryState_t traj_left_state;
 TrajectoryState_t traj_right_state;
 
-//RobStride_Expect R_left_expect;
-//RobStride_Expect R_right_expect;
-
-uint8_t flag = 0;// 复位标志
-static uint8_t ball_back_trigger = 0;// 击球标志
-static uint8_t traj_started = 0;// 轨迹规划开始标志
 static GPIO_PinState key1, key2, key3, key4;
 float time = 0.25f;// 轨迹规划时间
+static uint8_t trigger_lock = 0; // 防止电机挡住光电门误触发
+
 
 TaskHandle_t Ball_back_Handle;
 void Ball_back(void *pvParameters)
@@ -83,12 +81,19 @@ void Ball_back(void *pvParameters)
 		key2 = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_13);
 		key3 = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_2);
 		key4 = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_3);
-		if(key1 == GPIO_PIN_SET || key2 == GPIO_PIN_SET || key3 == GPIO_PIN_SET || key4 == GPIO_PIN_SET)
-			{
-				ball_back_trigger = 1;
-			}
-
-		if (ball_back_trigger == 1 && traj_started == 0)   // 一次触发
+		
+		static uint8_t last_key = 0;
+    uint8_t now_key = (key1 || key2 || key3 || key4);
+		
+		if(ALLState == READY && trigger_lock == 0){
+			
+			if(key1 == GPIO_PIN_SET || key2 == GPIO_PIN_SET || key3 == GPIO_PIN_SET || key4 == GPIO_PIN_SET)
+				{
+					ALLState = PLAN;
+					trigger_lock = 1;
+				}
+		}
+		else if (ALLState == PLAN)
 		{
 				Cubic_SetTrajectory(
 						&traj_left,
@@ -109,10 +114,10 @@ void Ball_back(void *pvParameters)
 						time,
 						xTaskGetTickCount()
 				);
-				traj_started = 1;
+				ALLState = FIRE;
 		}
 
-		if(ball_back_trigger == 1)
+		else if(ALLState == FIRE)
 		{
 		 if (traj_left.is_running || traj_right.is_running)
 		 {
@@ -143,12 +148,11 @@ void Ball_back(void *pvParameters)
 			0.0f, traj_right.target_pos, 0.0f,
 			R_right_expect.kp, R_right_expect.kd);
 				
-			traj_started = 0;
-			ball_back_trigger = 0;
+			ALLState = ALIGN;
 			}
 		}
 
-		if( flag == 0 && ball_back_trigger == 0)
+		else if(ALLState == ALIGN)
 			{				
 			RobStrideMotionControl(&R_left, 0x01, 
 				R_left_reset.reset_torque, 
@@ -162,11 +166,15 @@ void Ball_back(void *pvParameters)
 				R_right_reset.reset_omega, 
 				R_right_reset.kp, 
 				R_right_reset.kd);
-//			RobStrideMotionControl(&R_left, 0x01, 0, R_left_reset.reset_angle, 0, 0, 0);
-//			RobStrideMotionControl(&R_right, 0x02, 0, R_right_reset.reset_angle, 0, 0, 0);
+				
+		if(fabs(R_left.state.rad - R_left_reset.reset_angle) < 0.03f &&
+		   fabs(R_right.state.rad - R_right_reset.reset_angle) < 0.03f)
+				{
+				ALLState = READY;
+				trigger_lock = 0;
+				}
 			}
-			vTaskDelay(300);
-			
+			 
 	 vTaskDelayUntil(&last_wake, pdMS_TO_TICKS(2));
 	}
 }
