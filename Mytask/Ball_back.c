@@ -87,12 +87,14 @@ void Ball_back(void *pvParameters)
 		
 		if(ALLState == READY && trigger_lock == 0){
 			
-			if(key1 == GPIO_PIN_SET || key2 == GPIO_PIN_SET || key3 == GPIO_PIN_SET || key4 == GPIO_PIN_SET)
+			if(now_key == 1 && last_key == 0 && trigger_lock == 0)
 				{
 					ALLState = PLAN;
 					trigger_lock = 1;
 				}
+				last_key = now_key;
 		}
+		
 		else if (ALLState == PLAN)
 		{
 				Cubic_SetTrajectory(
