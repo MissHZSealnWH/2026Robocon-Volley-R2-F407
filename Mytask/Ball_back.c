@@ -15,7 +15,6 @@ RobStride_Expect R_left_expect = {
 	.expect_torque = -3.3f,
 	.kp = 280.0f,
 	.kd = 8.0f
-
 };
 RobStride_Expect R_right_expect = {
 	.expect_angle = 0.39f,
@@ -28,14 +27,14 @@ RobStride_Expect R_right_expect = {
 RobStride_Reset R_left_reset = {
 	.reset_angle = 0.0f,
 	.reset_omega = 0.0f,
-	.reset_torque = 0.3f,
+	.reset_torque = -0.3f,
 	.kp = 10.0f,
 	.kd = 1.0f
 };
 RobStride_Reset R_right_reset = {
 	.reset_angle = 0.0f,
 	.reset_omega = 0.0f,
-	.reset_torque = -0.3f,
+	.reset_torque = 0.3f,
 	.kp = 10.0f,
 	.kd = 1.0f
 };
@@ -50,7 +49,7 @@ TrajectoryState_t traj_left_state;
 TrajectoryState_t traj_right_state;
 
 static GPIO_PinState key1, key2, key3, key4;
-float time = 0.25f;// 轨迹规划时间
+float time = 0.22f;// 轨迹规划时间
 static uint8_t trigger_lock = 0; // 防止电机挡住光电门误触发
 
 
@@ -99,9 +98,9 @@ void Ball_back(void *pvParameters)
 		{
 				Cubic_SetTrajectory(
 						&traj_left,
-						R_left.state.rad,        // 当前真实角度
-						R_left.state.omega,      // 当前真实速度
-						R_left_expect.expect_angle,          // 目标角度
+						R_left.state.rad,            // 当前真实角度
+						R_left.state.omega,          // 当前真实速度
+						R_left_expect.expect_angle,  // 目标角度
 						0,
 						time,                  
 						xTaskGetTickCount()
@@ -163,7 +162,7 @@ void Ball_back(void *pvParameters)
 				R_left_reset.kp, 
 				R_left_reset.kd);
 			RobStrideMotionControl(&R_right, 0x02, 
-				R_right_reset.reset_torque, 
+			  R_right_reset.reset_torque, 
 				R_right_reset.reset_angle, 
 				R_right_reset.reset_omega, 
 				R_right_reset.kp, 
