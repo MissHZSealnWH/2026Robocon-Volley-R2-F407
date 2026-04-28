@@ -12,31 +12,31 @@ extern RM3508_TypeDef Rm3508;
 RobStride_Expect R_left_expect = {
 	.expect_angle = -0.355f,
 	.expect_omega = 0.0f,
-	.expect_torque = -3.3f,
-	.kp = 280.0f,
+	.expect_torque = -3.7f,
+	.kp = 300.0f,
 	.kd = 8.0f
 };
 RobStride_Expect R_right_expect = {
 	.expect_angle = 0.39f,
 	.expect_omega = 0.0f,
-	.expect_torque = 3.3f,
-	.kp = 280.0f,
+	.expect_torque = 3.7f,
+	.kp = 300.0f,
 	.kd = 8.0f
 };
 
 RobStride_Reset R_left_reset = {
 	.reset_angle = 0.0f,
 	.reset_omega = 0.0f,
-	.reset_torque = -0.3f,
-	.kp = 10.0f,
-	.kd = 1.0f
+	.reset_torque = -2.45f,
+	.kp = 2.0f,
+	.kd = 0.0f
 };
 RobStride_Reset R_right_reset = {
 	.reset_angle = 0.0f,
 	.reset_omega = 0.0f,
-	.reset_torque = 0.3f,
-	.kp = 10.0f,
-	.kd = 1.0f
+	.reset_torque = 2.45f,
+	.kp = 2.0f,
+	.kd = 0.0f
 };
 
 RobStride_t R_left;
@@ -49,7 +49,7 @@ TrajectoryState_t traj_left_state;
 TrajectoryState_t traj_right_state;
 
 static GPIO_PinState key1, key2, key3, key4;
-float time = 0.22f;// 轨迹规划时间
+float time = 0.18f;// 轨迹规划时间
 static uint8_t trigger_lock = 0; // 防止电机挡住光电门误触发
 
 
@@ -63,7 +63,7 @@ void Ball_back(void *pvParameters)
 	  RobStrideSetMode(&R_left, RobStride_MotionControl);
 	  RobStrideSetMode(&R_right, RobStride_MotionControl);
 	  vTaskDelay(100);
-    RobStrideEnable(&R_left);
+     RobStrideEnable(&R_left);
 	  RobStrideEnable(&R_right);
 	  vTaskDelay(100);
 
@@ -102,10 +102,10 @@ void Ball_back(void *pvParameters)
 						R_left.state.omega,          // 当前真实速度
 						R_left_expect.expect_angle,  // 目标角度
 						0,
-						time,                  
+						time, 
 						xTaskGetTickCount()
 				);
-
+			
 				Cubic_SetTrajectory(
 						&traj_right,
 						R_right.state.rad,
@@ -149,6 +149,8 @@ void Ball_back(void *pvParameters)
 			0.0f, traj_right.target_pos, 0.0f,
 			R_right_expect.kp, R_right_expect.kd);
 				
+			vTaskDelay(300);
+				
 			ALLState = ALIGN;
 			}
 		}
@@ -175,7 +177,6 @@ void Ball_back(void *pvParameters)
 				trigger_lock = 0;
 				}
 			}
-			 
 	 vTaskDelayUntil(&last_wake, pdMS_TO_TICKS(2));
 	}
 }
