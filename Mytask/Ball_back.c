@@ -48,6 +48,7 @@ CubicParam_t traj_right;
 TrajectoryState_t traj_left_state;
 TrajectoryState_t traj_right_state;
 
+static uint8_t ball_back_trigger = 0;// 击球标志
 static GPIO_PinState key1, key2, key3, key4;
 float time = 0.18f;// 轨迹规划时间
 static uint8_t trigger_lock = 0; // 防止电机挡住光电门误触发
@@ -56,19 +57,20 @@ static uint8_t trigger_lock = 0; // 防止电机挡住光电门误触发
 TaskHandle_t Ball_back_Handle;
 void Ball_back(void *pvParameters)
 {
-		vTaskDelay(3000);
+		vTaskDelay(5000);
     RobStrideInit(&R_left, &hcan1, 0x01, RobStride_04);
 	  RobStrideInit(&R_right, &hcan1, 0x02, RobStride_04);
 	  vTaskDelay(100);
 	  RobStrideSetMode(&R_left, RobStride_MotionControl);
 	  RobStrideSetMode(&R_right, RobStride_MotionControl);
 	  vTaskDelay(100);
-     RobStrideEnable(&R_left);
+    RobStrideEnable(&R_left);
 	  RobStrideEnable(&R_right);
 	  vTaskDelay(100);
 
     RobStrideResetAngle(&R_left);
     RobStrideResetAngle(&R_right);
+	  vTaskDelay(100);
 	
 	  R_left_reset.reset_angle = R_left.state.rad;
 	  R_right_reset.reset_angle = R_right.state.rad;
@@ -80,19 +82,21 @@ void Ball_back(void *pvParameters)
 		key2 = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_13);
 		key3 = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_2);
 		key4 = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_3);
+ 		
+		if(key1 == GPIO_PIN_SET || key2 == GPIO_PIN_SET || key3 == GPIO_PIN_SET || key4 == GPIO_PIN_SET)
+		{
+			ball_back_trigger = 1;
+		}
 		
-		static uint8_t last_key = 0;
-    uint8_t now_key = (key1 || key2 || key3 || key4);
-		
-		if(ALLState == READY && trigger_lock == 0){
+		if(ALLState == READY && trigger_lock == 0)
+			{
 			
-			if(now_key == 1 && last_key == 0 && trigger_lock == 0)
+			if(ball_back_trigger == 1 && trigger_lock == 0)
 				{
 					ALLState = PLAN;
 					trigger_lock = 1;
 				}
-				last_key = now_key;
-		}
+		  }
 		
 		else if (ALLState == PLAN)
 		{
@@ -144,13 +148,13 @@ void Ball_back(void *pvParameters)
 			RobStrideMotionControl(&R_left, 0x01,
 			0.0f, traj_left.target_pos, 0.0f,
 			R_left_expect.kp, R_left_expect.kd);
-
+				
 			RobStrideMotionControl(&R_right, 0x02,
 			0.0f, traj_right.target_pos, 0.0f,
 			R_right_expect.kp, R_right_expect.kd);
-				
+			
 			vTaskDelay(300);
-				
+			
 			ALLState = ALIGN;
 			}
 		}
@@ -173,18 +177,19 @@ void Ball_back(void *pvParameters)
 		if(fabs(R_left.state.rad - R_left_reset.reset_angle) < 0.03f &&
 		   fabs(R_right.state.rad - R_right_reset.reset_angle) < 0.03f)
 				{
-				ALLState = READY;
-				trigger_lock = 0;
+					ALLState = READY;
+					trigger_lock = 0;
+					ball_back_trigger = 0;
 				}
 			}
 	 vTaskDelayUntil(&last_wake, pdMS_TO_TICKS(2));
 	}
 }
 
-void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
-{
-	uint8_t buf[8];
-	uint32_t ID = CAN_Receive_DataFrame(&hcan1, buf);
-	RobStrideRecv_Handle(&R_left, &hcan1, ID, buf);
-  RobStrideRecv_Handle(&R_right, &hcan1, ID, buf);
-}
+//void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
+//{
+//	uint8_t buf[8];
+//	uint32_t ID = CAN_Receive_DataFrame(&hcan1, buf);
+//	RobStrideRecv_Handle(&R_left, &hcan1, ID, buf);
+//  RobStrideRecv_Handle(&R_right, &hcan1, ID, buf);
+//}
