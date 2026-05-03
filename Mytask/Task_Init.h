@@ -35,8 +35,8 @@ typedef struct{
 	uint8_t Right_Broadside_Key;
 } hw_key_t;
 
-#define FRAME_HEAD  0x5A
-#define FRAME_TAIL  0xA5
+#define FRAME_HEAD  0xAA
+#define FRAME_TAIL  0x55
 #define ACTION_CMD  0x01
 
 typedef struct {

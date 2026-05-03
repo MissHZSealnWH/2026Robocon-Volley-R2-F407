@@ -20,14 +20,14 @@ void Task_Init(){
 	HAL_CAN_Start(&hcan2);
 	HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO1_MSG_PENDING);
 	
-	RS485Init(&rs485bus, &huart6, GPIOA, GPIO_PIN_4);// 初始化485总线管理器
+//	RS485Init(&rs485bus, &huart6, GPIOA, GPIO_PIN_4);// 初始化485总线管理器
 	
 	 //遥控器
    __HAL_UART_ENABLE_IT(&huart5, UART_IT_IDLE);
    HAL_UARTEx_ReceiveToIdle_DMA(&huart5, usart5_buff, sizeof(usart5_buff));
    __HAL_DMA_DISABLE_IT(huart5.hdmarx, DMA_IT_HT);
 
-	 //F407与H723通信
+	 //F407与H743通信
 
 
 	vPortEnterCritical();
@@ -39,16 +39,16 @@ void Task_Init(){
         3,
         &Remote_Handle); 
 					
-//	xTaskCreate(Hit_Task,
-//			 "Hit_Task",
-//				400,
-//				NULL,
-//				3,
-//				&Hit_Task_Handle); 
-				
+	xTaskCreate(Hit_Task,
+			 "Hit_Task",
+				2558,
+				NULL,
+				3,
+				&Hit_Task_Handle); 
+		
 	xTaskCreate(Control_Remote,
 			 "Control_Remote",
-				450,
+				256,
 				NULL,
 				3,
 				&Control_Remote_Handle); 
