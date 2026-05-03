@@ -2,126 +2,162 @@
 #include "go_motor.h"
 #include "485_bus.h"
 #include "motorx.h"
+#include "RobStride2.h"
+#include "Ball_back.h"
 
-uint8_t start = 0;//发球标志
-RS485_t rs485bus;
+int8_t init_done = 0;
+int16_t send_symbol = 1;
+int16_t time_b = 100;
+int16_t time_c = 1000;
 
-Exp_param Exp_3508;
-Rm3508_pid Rm3508_PID = {
+extern RobStride_t R_left;
+extern RobStride_t R_right;
+
+int16_t motorCurrentBuf[4] = {0};
+
+Motor3508Ex_t Take_Up = {
+	.ID = 0x203,
+	.hcan = &hcan1,
 	.pos_pid = {
-		.Kp = 0.0f,
+		.Kp = 22.1f,
 		.Ki = 0.0f,
 		.Kd = 0.0f,
-		.limit = 50.0f,
-		.output_limit = 10000.0f
-			},
+		.limit = 10000.0f,
+		.output_limit = 9006.3f
+	},
 	.vel_pid = {
-		.Kp = 0.0f,
-		.Ki = 0.0f,
+		.Kp = 8.0f,
+		.Ki = 0.01f,
 		.Kd = 0.0f,
-		.limit = 50.0f,
-		.output_limit = 10000.0f
-			}
-	};
-
-RM3508_TypeDef Rm3508;
-
-Unitreecontrol Unitree_param = {
-	.Volleyball_Go.motor_id = 0x01,
-	.Volleyball_Go.rs485 = &rs485bus,
-	.Exp = {
-		.exp_torque = 0.0f,
-    .exp_pos = 0.0f,
-    .exp_vel = 0.0f,
-    .exp_kp = 0.0f,
-    .exp_kd = 0.0f
+		.limit = 10000.0f,
+		.output_limit = 16384.0f
 	}
 };
-	uint8_t forward_trigger = 0;
-	uint32_t error_cnt = 0;
-	uint32_t last_error_time = 0;
-	ErrorStats_t error_stats = {0};
-	Exp_param go_volley = {0};
-	uint32_t err_timer_cnt = 0;
 
-	
+float first_angle = 0.0f;
+float second_angle = 0.0f;
+float angle_offset = 6810.95;
+int16_t rad_init = 0;
+typedef enum {
+    BALL_IDLE = 0,       
+    BALL_PREPARE,        
+    BALL_HIT,            
+    BALL_RESET           
+} BallState_t;
+
 TaskHandle_t Hit_Task_Handle;
 void Hit_Task(void *pvParameters)
 {
-	TickType_t Last_wake_time = xTaskGetTickCount();
+	  BallState_t ball_state = BALL_IDLE;
 	
-		//3508reset
-	  int16_t Rm3508_reset[4];
-	  //3508send
-		int16_t Rm3508_send[4];
+   TickType_t last_wake = xTaskGetTickCount();
+	
+    TickType_t state_start = last_wake;
 
-		for(;;)
-		{
-			uint16_t Reset_3508_pos;
-			float Reset_Unitree_pos;
-			if(forward_trigger == 0 && start == 1)
-			{
-			Reset_3508_pos = Rm3508.MchanicalAngle;
-			Reset_Unitree_pos = Unitree_param.Volleyball_Go.state.rad;
-				
-			forward_trigger = 1;
+while(1)
+    {
+        TickType_t now = xTaskGetTickCount();
+        if (rad_init < 100)
+        {
+				 first_angle = Take_Up.motor.Angle_DEG;
+				 second_angle = first_angle + angle_offset;
+				 rad_init++;
+				}
+
+        // 状态机开始
+        switch (ball_state)
+        {
+					case BALL_IDLE:
+					if (init_done)
+					{
+						state_start = now; 
+						ball_state = BALL_PREPARE;
+						send_symbol = 1;
+					}
+            break;
+
+          case BALL_PREPARE:
+					if ((now - state_start) < pdMS_TO_TICKS(time_b))
+					{
+						PID_Control2(Take_Up.motor.Angle_DEG, second_angle, &Take_Up.pos_pid);
+						PID_Control2(Take_Up.motor.Speed, Take_Up.pos_pid.pid_out, &Take_Up.vel_pid);
+						
+						motorCurrentBuf[2]=(int16_t)Take_Up.vel_pid.pid_out;
+						MotorSend(&hcan1, 0x200, motorCurrentBuf);	
+					}
+					else
+					{
+						ball_state = BALL_HIT;
+						state_start = now;
+					}
+            break;
+					case BALL_HIT:
+					if ((now - state_start) < pdMS_TO_TICKS(time_c)) // 轨迹时间
+					{
+						if(send_symbol == 1)
+						{				 
+						Send_Action(0x01);
+						send_symbol = 2;
+						}
+					PID_Control2(Take_Up.motor.Angle_DEG, second_angle, &Take_Up.pos_pid);
+					PID_Control2(Take_Up.motor.Speed, Take_Up.pos_pid.pid_out, &Take_Up.vel_pid);
+						
+					motorCurrentBuf[2]=(int16_t)Take_Up.vel_pid.pid_out;
+					MotorSend(&hcan1, 0x200, motorCurrentBuf);		
+					}
+					else 
+					{
+					ball_state = BALL_RESET;
+					state_start = now;
+					}
+					break;
+					
+				case BALL_RESET:
+				if((now - state_start) < pdMS_TO_TICKS(2500))
+					{
+						PID_Control2(Take_Up.motor.Angle_DEG, first_angle, &Take_Up.pos_pid);
+						PID_Control2(Take_Up.motor.Speed, Take_Up.pos_pid.pid_out, &Take_Up.vel_pid);
+						
+						motorCurrentBuf[2]=(int16_t)Take_Up.vel_pid.pid_out;
+						MotorSend(&hcan1, 0x200, motorCurrentBuf);	
+					}
+				else
+				{
+					init_done = 0;
+					send_symbol = 1;
+					ball_state = BALL_IDLE;
+				}
+        break;
+
+        default:
+					
+				ball_state = BALL_IDLE;
+				break;
 			}
+
+   vTaskDelayUntil(&last_wake, pdMS_TO_TICKS(2));
+		}
+	}
+
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
+{
+	if(hcan->Instance ==CAN1)
+	{
+		uint8_t Recv[8] = {0};
+
+    if (hcan->Instance == CAN1)
+    {
 			
-			vTaskDelay(50);
-			if(forward_trigger == 1)
-			{
-			PID_Control2(Rm3508.MchanicalAngle, Exp_3508.exp_pos, &Rm3508_PID.pos_pid);
-			PID_Control2(Rm3508.Speed, Rm3508_PID.pos_pid.pid_out, &Rm3508_PID.vel_pid);
-			int16_t rm3508_send = (int16_t)Rm3508_PID.vel_pid.pid_out;
-			Rm3508_send[0] = rm3508_send;
-			//默认id为3508id为1
-			MotorSend(&hcan1, 0x200, Rm3508_send);
-			forward_trigger = 2;
-			}
-			vTaskDelay(150);
-			//宇树
-			if(forward_trigger == 2)
-			{
-			GoMotorSend(&Unitree_param.Volleyball_Go,
-			Unitree_param.Exp.exp_torque,
-			Unitree_param.Exp.exp_vel,
-			Unitree_param.Exp.exp_pos,
-			Unitree_param.Exp.exp_kp,
-			Unitree_param.Exp.exp_kd);
-			
-			GoMotorRecv(&Unitree_param.Volleyball_Go);
-			forward_trigger = 3;
-			}
-			
-			vTaskDelay(200);
-			if(forward_trigger == 3)
-			{
-			GoMotorSend(&Unitree_param.Volleyball_Go,
-			Unitree_param.Exp.exp_torque,
-			Unitree_param.Exp.exp_vel,
-			Reset_Unitree_pos,
-			Unitree_param.Exp.exp_kp,
-			Unitree_param.Exp.exp_kd);
-				
-			GoMotorRecv(&Unitree_param.Volleyball_Go);
-			forward_trigger = 4;
-			}
-			
-			vTaskDelay(500);
-			if(forward_trigger ==4)
-			{
-			Rm3508_reset[0] = (int16_t)Reset_3508_pos;
-			
-			MotorSend(&hcan1,0x200,Rm3508_reset);
-			forward_trigger = 0;
-			}
-		vTaskDelayUntil(&Last_wake_time, pdMS_TO_TICKS(2));
-			}
-}
-//void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
-//{
-//    uint8_t buf[8];
-//    uint32_t ID = CAN_Receive_DataFrame(&hcan1, buf);
-//    RM3508_Receive(&Rm3508, buf);
+	uint32_t ID = CAN_Receive_DataFrame(&hcan1, Recv);
+//if(ID == 0x01) {
+    RobStrideRecv_Handle(&R_left, &hcan1, ID, Recv);
+//} else if(ID == 0x02) {
+    RobStrideRecv_Handle(&R_right, &hcan1, ID, Recv);
 //}
-
+//else if(ID == 0x203)
+//		{
+	int c =	Motor3508Recv(&Take_Up, &hcan1, ID, Recv);
+//		}
+			}
+		}
+	}
