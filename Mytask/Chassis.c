@@ -11,6 +11,7 @@
 #include "math.h"
 
 
+extern int8_t init_done;
 extern SemaphoreHandle_t remote_semaphore;
 
 //遥控器
@@ -22,9 +23,9 @@ uint8_t usart5_buff[30];
 //电机驱动
 Motor_param motor1 = {
 .PID = {
-	.Kp = 0.0f,
-	.Ki = 0.0f,
-	.Kd = 0.0f,
+	.Kp = 0.5f,
+	.Ki = 0.002f,
+	.Kd = 0.1f,
 	.limit = 10000.0f,
 	.output_limit = 40.0f,
 },
@@ -61,7 +62,7 @@ Motor_param motor3 = {
 };
 
 //遥控模式
-Positon_label MODE = REMOTE;
+Chassis_mode MODE = REMOTE;
 
 volatile float Vx =0;   //前后移动
 volatile float Vy =0;   //左右移动
@@ -136,11 +137,9 @@ void MyRecvCallback(uint8_t *src, uint16_t size, void *user_data)
 {
     memcpy(&recv_buff, src, size);
     memcpy(&recv_pack, recv_buff, sizeof(recv_pack));
-    Rocker_Filter(&recv_pack);
+//    Rocker_Filter(&recv_pack);
 		//遥控器
-    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-    xSemaphoreGiveFromISR(remote_semaphore, &xHigherPriorityTaskWoken);
-    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+		xSemaphoreGive(remote_semaphore);
 }
 
 
@@ -177,16 +176,18 @@ void Remote(void *pvParameters)
 	    VESC_SetCurrent(&motor3.steering, motor3.PID.pid_out);  
 			
 	}
-		if(MODE == STP || MODE == STOP )
-		{
-			wheel_one = 0;
-			wheel_two = 0;
-			wheel_three=0;
-			
-			VESC_SetCurrent(&motor1.steering, 0);
-			VESC_SetCurrent(&motor2.steering, 0);
-			VESC_SetCurrent(&motor3.steering, 0);
-		}
+			if(KEY_RISING_EDGE(Remote_Control.First, Remote_Control.Second, Left_Switch_Up))
+			{
+			  MODE = REMOTE;
+			}
+			if(KEY_RISING_EDGE(Remote_Control.First, Remote_Control.Second, Left_Switch_Down))
+			{
+				MODE = AUTO;
+		  }
+			if(KEY_RISING_EDGE(Remote_Control.First, Remote_Control.Second, Right_Key_Right))
+			{
+				init_done = 1;
+			}
 		vTaskDelayUntil(&last_wake_time, pdMS_TO_TICKS(2));
 	}
 }
@@ -199,15 +200,7 @@ void Control_Remote(void *pvParameters)
 {
 	for(;;)
 	{
-		Remote_Analysis();
-		
-		if(KEY_RISING_EDGE(Remote_Control.First, last_key, Right_Key_Up))
-
-    {
-        Send_Action(ACTION_CMD);
-    }
-		last_key = Remote_Control.First;
-		
+		Remote_Analysis();		
 	 }
 }
 

@@ -16,15 +16,9 @@ typedef enum {
      STP,//自动模式下的急停
      STOP,//遥控模式下的急停
      REMOTE,
-	   CHOOSE,
-}Positon_label;
+	   AUTO,
+}Chassis_mode;
 
-typedef enum {
-    READY,//等待
-    ALIGN,//转到发球位
-    FIRE,//高速转
-    RETURN //回零
-} ShootState;
 
 //底盘电机参数
 typedef struct{
@@ -38,7 +32,7 @@ extern TaskHandle_t Remote_Handle;
 extern TaskHandle_t Control_Remote_Handle;
 extern TaskHandle_t Ball_back_Handle;
 //模式
-extern Positon_label MODE;
+extern Chassis_mode MODE;
 
 //陀螺仪缓存区
 extern uint8_t position_dma_buff[50];
