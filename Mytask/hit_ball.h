@@ -9,7 +9,11 @@
 #include "go_motor.h"
 #include "motorEx.h"
 
-
+typedef struct{
+	float reset_angle;
+  float target_angle;
+  float offset_angle;
+	}StartBall_Param;
 
 extern TaskHandle_t Hit_Task_Handle;
 
