@@ -38,6 +38,7 @@ volley_ok/hit_ball.o: ..\Mytask\hit_ball.c ..\Mytask\hit_ball.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\include\queue.h \
   ..\lib\CANDrive.h ..\Core\Inc\can.h ..\Core\Inc\usart.h \
   ..\lib\bsp_dwt.h ..\Mytask\Chassis.h ..\lib\VESC.h ..\lib\PID_old.h \
-  ..\MDK-ARM\step.h ..\lib\go_motor.h ..\lib\485_bus.h \
+  ..\lib\step.h ..\lib\go_motor.h ..\lib\485_bus.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\include\semphr.h \
-  ..\lib\mylist.h ..\MDK-ARM\motorEx.h ..\MDK-ARM\motorx.h
+  ..\lib\mylist.h ..\lib\motorEx.h ..\lib\motor.h ..\lib\motorx.h \
+  ..\lib\RobStride2.h ..\Mytask\Ball_back.h

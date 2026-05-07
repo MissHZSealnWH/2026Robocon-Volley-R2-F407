@@ -39,6 +39,6 @@ volley_ok/chassis.o: ..\Mytask\Chassis.c ..\Mytask\Chassis.h \
   ..\lib\CANDrive.h ..\Core\Inc\can.h ..\Core\Inc\usart.h \
   ..\lib\bsp_dwt.h ..\lib\PID_old.h ..\lib\VESC.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\include\semphr.h \
-  ..\MDK-ARM\dataFrame.h ..\MDK-ARM\comm.h \
-  ..\MDK-ARM\comm_stm32_hal_middle.h ..\MDK-ARM\data_poll.h \
-  ..\MDK-ARM\My_list.h
+  ..\Remote_Control\dataFrame.h ..\Remote_Control\comm.h \
+  ..\Remote_Control\comm_stm32_hal_middle.h \
+  ..\Remote_Control\data_poll.h ..\lib\My_list.h

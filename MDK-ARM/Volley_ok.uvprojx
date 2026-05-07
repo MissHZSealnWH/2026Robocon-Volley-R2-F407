@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F407xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../MDK-ARM;../lib;../Mytask</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../MDK-ARM;../lib;../Mytask;..\Remote_Control</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -630,24 +630,24 @@
               <FilePath>..\Mytask\Task_Init.h</FilePath>
             </File>
             <File>
-              <FileName>Handle.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Handle.c</FilePath>
-            </File>
-            <File>
-              <FileName>Handle.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Handle.h</FilePath>
-            </File>
-            <File>
               <FileName>Ball_back.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Ball_back.c</FilePath>
+              <FilePath>..\Mytask\Ball_back.c</FilePath>
             </File>
             <File>
               <FileName>Ball_back.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Ball_back.h</FilePath>
+              <FilePath>..\Mytask\Ball_back.h</FilePath>
+            </File>
+            <File>
+              <FileName>Handle.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Mytask\Handle.c</FilePath>
+            </File>
+            <File>
+              <FileName>Handle.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Mytask\Handle.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -675,6 +675,11 @@
               <FilePath>..\lib\bsp_dwt.h</FilePath>
             </File>
             <File>
+              <FileName>RMLibHead.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\lib\RMLibHead.h</FilePath>
+            </File>
+            <File>
               <FileName>CANDrive.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\lib\CANDrive.c</FilePath>
@@ -695,11 +700,6 @@
               <FilePath>..\lib\PID_old.h</FilePath>
             </File>
             <File>
-              <FileName>RMLibHead.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\lib\RMLibHead.h</FilePath>
-            </File>
-            <File>
               <FileName>VESC.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\lib\VESC.c</FilePath>
@@ -708,16 +708,6 @@
               <FileName>VESC.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\lib\VESC.h</FilePath>
-            </File>
-            <File>
-              <FileName>step.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\step.c</FilePath>
-            </File>
-            <File>
-              <FileName>step.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\step.h</FilePath>
             </File>
             <File>
               <FileName>485_bus.c</FileName>
@@ -760,24 +750,34 @@
               <FilePath>..\lib\mylist.h</FilePath>
             </File>
             <File>
+              <FileName>step.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\lib\step.c</FilePath>
+            </File>
+            <File>
+              <FileName>step.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\lib\step.h</FilePath>
+            </File>
+            <File>
               <FileName>motorEx.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\motorEx.c</FilePath>
+              <FilePath>..\lib\motorEx.c</FilePath>
             </File>
             <File>
               <FileName>motorEx.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\motorEx.h</FilePath>
+              <FilePath>..\lib\motorEx.h</FilePath>
             </File>
             <File>
               <FileName>motorx.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\motorx.c</FilePath>
+              <FilePath>..\lib\motorx.c</FilePath>
             </File>
             <File>
               <FileName>motorx.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\motorx.h</FilePath>
+              <FilePath>..\lib\motorx.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -787,47 +787,37 @@
             <File>
               <FileName>comm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\comm.c</FilePath>
+              <FilePath>..\Remote_Control\comm.c</FilePath>
             </File>
             <File>
               <FileName>comm.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\comm.h</FilePath>
+              <FilePath>..\Remote_Control\comm.h</FilePath>
             </File>
             <File>
               <FileName>comm_stm32_hal_middle.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\comm_stm32_hal_middle.c</FilePath>
+              <FilePath>..\Remote_Control\comm_stm32_hal_middle.c</FilePath>
             </File>
             <File>
               <FileName>comm_stm32_hal_middle.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\comm_stm32_hal_middle.h</FilePath>
+              <FilePath>..\Remote_Control\comm_stm32_hal_middle.h</FilePath>
             </File>
             <File>
               <FileName>data_poll.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\data_poll.c</FilePath>
+              <FilePath>..\Remote_Control\data_poll.c</FilePath>
             </File>
             <File>
               <FileName>data_poll.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\data_poll.h</FilePath>
+              <FilePath>..\Remote_Control\data_poll.h</FilePath>
             </File>
             <File>
               <FileName>dataFrame.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\dataFrame.h</FilePath>
-            </File>
-            <File>
-              <FileName>My_list.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\My_list.c</FilePath>
-            </File>
-            <File>
-              <FileName>My_list.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\My_list.h</FilePath>
+              <FilePath>..\Remote_Control\dataFrame.h</FilePath>
             </File>
           </Files>
         </Group>

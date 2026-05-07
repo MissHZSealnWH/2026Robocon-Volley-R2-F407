@@ -1,4 +1,5 @@
-volley_ok/motorx.o: motorx.c ..\MDK-ARM\motor.h ..\lib\RMLibHead.h \
+volley_ok/motorx.o: ..\lib\motorx.c ..\lib\motor.h ..\lib\CANDrive.h \
+  ..\lib\RMLibHead.h \
   ..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h \
   ..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f407xx.h \
   ..\Drivers\CMSIS\Include\core_cm4.h \
@@ -24,4 +25,4 @@ volley_ok/motorx.o: motorx.c ..\MDK-ARM\motor.h ..\lib\RMLibHead.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h \
-  ..\lib\CANDrive.h ..\Core\Inc\can.h ..\Core\Inc\main.h
+  ..\Core\Inc\can.h ..\Core\Inc\main.h

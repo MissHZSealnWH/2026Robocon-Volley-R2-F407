@@ -1,5 +1,5 @@
-volley_ok/handle.o: Handle.c Handle.h ..\Mytask\hit_ball.h \
-  ..\Mytask\Task_Init.h ..\lib\RMLibHead.h \
+volley_ok/handle.o: ..\Mytask\Handle.c ..\Mytask\Handle.h \
+  ..\Mytask\hit_ball.h ..\Mytask\Task_Init.h ..\lib\RMLibHead.h \
   ..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h \
   ..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f407xx.h \
   ..\Drivers\CMSIS\Include\core_cm4.h \
@@ -38,7 +38,7 @@ volley_ok/handle.o: Handle.c Handle.h ..\Mytask\hit_ball.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\include\queue.h \
   ..\lib\CANDrive.h ..\Core\Inc\can.h ..\Core\Inc\usart.h \
   ..\lib\bsp_dwt.h ..\Mytask\Chassis.h ..\lib\VESC.h ..\lib\PID_old.h \
-  ..\MDK-ARM\step.h ..\lib\go_motor.h ..\lib\485_bus.h \
+  ..\lib\step.h ..\lib\go_motor.h ..\lib\485_bus.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\include\semphr.h \
-  ..\lib\mylist.h ..\MDK-ARM\motorEx.h ..\MDK-ARM\motorx.h comm.h \
-  comm_stm32_hal_middle.h
+  ..\lib\mylist.h ..\lib\motorEx.h ..\lib\motor.h \
+  ..\Remote_Control\comm.h ..\Remote_Control\comm_stm32_hal_middle.h

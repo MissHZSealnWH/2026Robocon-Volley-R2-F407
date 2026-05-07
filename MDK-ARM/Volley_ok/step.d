@@ -1,1 +1,1 @@
-volley_ok/step.o: step.c step.h
+volley_ok/step.o: ..\lib\step.c ..\lib\step.h

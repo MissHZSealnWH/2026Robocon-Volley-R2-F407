@@ -29,34 +29,34 @@ virtualFolder:
                 - path: ../Core/Src/stm32f4xx_it.c
                 - path: ../Core/Src/stm32f4xx_hal_msp.c
                 - path: ../Core/Src/stm32f4xx_hal_timebase_tim.c
-              folders:
-                - name: Drivers
-                  files: []
-                  folders:
-                    - name: STM32F4xx_HAL_Driver
-                      files:
-                        - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c
-                        - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c
-                        - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_can.c
-                        - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c
-                        - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c
-                        - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c
-                        - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c
-                        - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c
-                        - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c
-                        - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c
-                        - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c
-                        - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c
-                        - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c
-                        - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c
-                        - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c
-                        - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c
-                        - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c
-                      folders: []
-                    - name: CMSIS
-                      files:
-                        - path: ../Core/Src/system_stm32f4xx.c
-                      folders: []
+              folders: []
+    - name: Drivers
+      files: []
+      folders:
+        - name: STM32F4xx_HAL_Driver
+          files:
+            - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c
+            - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c
+            - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_can.c
+            - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c
+            - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c
+            - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c
+            - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c
+            - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c
+            - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c
+            - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c
+            - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c
+            - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c
+            - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c
+            - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c
+            - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c
+            - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c
+            - path: ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c
+          folders: []
+        - name: CMSIS
+          files:
+            - path: ../Core/Src/system_stm32f4xx.c
+          folders: []
     - name: Middlewares
       files: []
       folders:
@@ -81,10 +81,10 @@ virtualFolder:
         - path: ../Mytask/hit_ball.h
         - path: ../Mytask/Task_Init.c
         - path: ../Mytask/Task_Init.h
-        - path: Handle.c
-        - path: Handle.h
-        - path: Ball_back.c
-        - path: Ball_back.h
+        - path: ../Mytask/Ball_back.c
+        - path: ../Mytask/Ball_back.h
+        - path: ../Mytask/Handle.c
+        - path: ../Mytask/Handle.h
       folders: []
     - name: lib
       files:
@@ -92,15 +92,13 @@ virtualFolder:
         - path: ../lib/RobStride2.h
         - path: ../lib/bsp_dwt.c
         - path: ../lib/bsp_dwt.h
+        - path: ../lib/RMLibHead.h
         - path: ../lib/CANDrive.c
         - path: ../lib/CANDrive.h
         - path: ../lib/PID_old.c
         - path: ../lib/PID_old.h
-        - path: ../lib/RMLibHead.h
         - path: ../lib/VESC.c
         - path: ../lib/VESC.h
-        - path: step.c
-        - path: step.h
         - path: ../lib/485_bus.c
         - path: ../lib/485_bus.h
         - path: ../lib/crc_ccitt.c
@@ -109,22 +107,22 @@ virtualFolder:
         - path: ../lib/go_motor.h
         - path: ../lib/mylist.c
         - path: ../lib/mylist.h
-        - path: motorEx.c
-        - path: motorEx.h
-        - path: motorx.c
-        - path: motorx.h
+        - path: ../lib/step.c
+        - path: ../lib/step.h
+        - path: ../lib/motorEx.c
+        - path: ../lib/motorEx.h
+        - path: ../lib/motorx.c
+        - path: ../lib/motorx.h
       folders: []
     - name: Remote_Control
       files:
-        - path: comm.c
-        - path: comm.h
-        - path: comm_stm32_hal_middle.c
-        - path: comm_stm32_hal_middle.h
-        - path: data_poll.c
-        - path: data_poll.h
-        - path: dataFrame.h
-        - path: My_list.c
-        - path: My_list.h
+        - path: ../Remote_Control/comm.c
+        - path: ../Remote_Control/comm.h
+        - path: ../Remote_Control/comm_stm32_hal_middle.c
+        - path: ../Remote_Control/comm_stm32_hal_middle.h
+        - path: ../Remote_Control/data_poll.c
+        - path: ../Remote_Control/data_poll.h
+        - path: ../Remote_Control/dataFrame.h
       folders: []
     - name: ::CMSIS
       files: []
@@ -151,6 +149,7 @@ targets:
         - .
         - ../lib
         - ../Mytask
+        - ../Remote_Control
         - .cmsis/include
         - RTE/_Volley_ok
       libList: []

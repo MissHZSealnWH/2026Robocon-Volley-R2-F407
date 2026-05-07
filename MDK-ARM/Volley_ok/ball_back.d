@@ -1,5 +1,5 @@
-volley_ok/ball_back.o: Ball_back.c Ball_back.h ..\lib\PID_old.h \
-  ..\lib\RobStride2.h \
+volley_ok/ball_back.o: ..\Mytask\Ball_back.c ..\Mytask\Ball_back.h \
+  ..\lib\PID_old.h ..\lib\RobStride2.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h \
   ..\Core\Inc\stm32f4xx_hal_conf.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h \
@@ -37,5 +37,5 @@ volley_ok/ball_back.o: Ball_back.c Ball_back.h ..\lib\PID_old.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\include\list.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\include\queue.h \
   ..\lib\CANDrive.h ..\Core\Inc\can.h ..\Core\Inc\usart.h \
-  ..\lib\bsp_dwt.h ..\Mytask\Chassis.h ..\lib\VESC.h step.h motorEx.h \
-  motorx.h
+  ..\lib\bsp_dwt.h ..\Mytask\Chassis.h ..\lib\VESC.h ..\lib\step.h \
+  ..\lib\motorEx.h ..\lib\motor.h

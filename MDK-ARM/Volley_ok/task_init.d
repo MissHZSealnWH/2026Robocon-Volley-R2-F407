@@ -37,8 +37,7 @@ volley_ok/task_init.o: ..\Mytask\Task_Init.c ..\lib\RMLibHead.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\include\queue.h \
   ..\lib\CANDrive.h ..\Core\Inc\can.h ..\Core\Inc\usart.h \
   ..\lib\bsp_dwt.h ..\Mytask\Chassis.h ..\lib\VESC.h ..\lib\PID_old.h \
-  ..\Mytask\hit_ball.h ..\MDK-ARM\step.h ..\lib\go_motor.h \
-  ..\lib\485_bus.h \
+  ..\Mytask\hit_ball.h ..\lib\step.h ..\lib\go_motor.h ..\lib\485_bus.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\include\semphr.h \
-  ..\lib\mylist.h ..\MDK-ARM\motorEx.h ..\MDK-ARM\motorx.h \
-  ..\MDK-ARM\dataFrame.h
+  ..\lib\mylist.h ..\lib\motorEx.h ..\lib\motor.h \
+  ..\Remote_Control\dataFrame.h

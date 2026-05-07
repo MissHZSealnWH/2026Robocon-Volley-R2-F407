@@ -1,5 +1,6 @@
-volley_ok/comm_stm32_hal_middle.o: comm_stm32_hal_middle.c \
-  comm_stm32_hal_middle.h \
+volley_ok/comm_stm32_hal_middle.o: \
+  ..\Remote_Control\comm_stm32_hal_middle.c \
+  ..\Remote_Control\comm_stm32_hal_middle.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h \
   ..\Core\Inc\stm32f4xx_hal_conf.h \
   ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h \

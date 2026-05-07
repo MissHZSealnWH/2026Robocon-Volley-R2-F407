@@ -38,4 +38,4 @@ volley_ok/stm32f4xx_it.o: ..\Core\Src\stm32f4xx_it.c ..\Core\Inc\main.h \
   ..\lib\CANDrive.h ..\Core\Inc\can.h ..\Core\Inc\usart.h \
   ..\lib\bsp_dwt.h ..\Mytask\Chassis.h ..\lib\VESC.h ..\lib\PID_old.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\include\semphr.h \
-  ..\MDK-ARM\dataFrame.h
+  ..\Remote_Control\dataFrame.h

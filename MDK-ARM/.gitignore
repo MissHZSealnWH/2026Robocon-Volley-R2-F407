@@ -13,3 +13,40 @@
 # eide template
 *.ept
 *.eide-template
+
+# Keil MDK specific ignores
+# Build outputs
+*.o
+*.d
+*.crf
+*.lst
+*.map
+*.hex
+*.axf
+*.bin
+*.elf
+*.lib
+*.a
+*.sct
+
+# Project backups
+*.uvprojx.bak
+*.uvoptx.bak
+
+# User-specific settings
+*.uvguix.*
+
+# RTE (Run-Time Environment) generated files
+RTE/
+
+# Debug and log files
+JLinkLog.txt
+JLinkSettings.ini
+EventRecorderStub.scvd
+*.log
+*.htm
+
+# Temporary files
+*.bak
+*.dep
+*.tmp

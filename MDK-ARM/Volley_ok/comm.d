@@ -1,4 +1,5 @@
-volley_ok/comm.o: comm.c comm.h ..\Mytask\Task_Init.h ..\lib\RMLibHead.h \
+volley_ok/comm.o: ..\Remote_Control\comm.c ..\Remote_Control\comm.h \
+  ..\Mytask\Task_Init.h ..\lib\RMLibHead.h \
   ..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h \
   ..\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f407xx.h \
   ..\Drivers\CMSIS\Include\core_cm4.h \
@@ -37,6 +38,7 @@ volley_ok/comm.o: comm.c comm.h ..\Mytask\Task_Init.h ..\lib\RMLibHead.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\include\queue.h \
   ..\lib\CANDrive.h ..\Core\Inc\can.h ..\Core\Inc\usart.h \
   ..\lib\bsp_dwt.h ..\Mytask\Chassis.h ..\lib\VESC.h ..\lib\PID_old.h \
-  dataFrame.h comm_stm32_hal_middle.h \
+  ..\Remote_Control\dataFrame.h \
+  ..\Remote_Control\comm_stm32_hal_middle.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\include\semphr.h \
-  ..\lib\mylist.h data_poll.h
+  ..\Remote_Control\mylist.h ..\Remote_Control\data_poll.h

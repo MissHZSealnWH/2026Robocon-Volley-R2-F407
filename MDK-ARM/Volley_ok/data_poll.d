@@ -1,4 +1,5 @@
-volley_ok/data_poll.o: data_poll.c data_poll.h \
+volley_ok/data_poll.o: ..\Remote_Control\data_poll.c \
+  ..\Remote_Control\data_poll.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\include\FreeRTOS.h \
   ..\Core\Inc\FreeRTOSConfig.h \
   ..\Middlewares\Third_Party\FreeRTOS\Source\include\projdefs.h \
