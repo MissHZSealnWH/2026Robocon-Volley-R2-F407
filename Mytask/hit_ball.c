@@ -8,8 +8,8 @@
 extern uint8_t init_done;
 int16_t send_symbol = 1; // 发送宇树电机执行发球
 
-int16_t time_b = 100;
-int16_t time_c = 1000;
+int16_t time_prepare = 100;
+int16_t time_do = 1000;
 int16_t time_reset = 2500;
 
 extern RobStride_t R_left;
@@ -84,7 +84,7 @@ while(1)
             break;
 
           case BALL_PREPARE:
-					if ((now - state_start) < pdMS_TO_TICKS(time_b))
+						if ((now - state_start) < pdMS_TO_TICKS(time_prepare)) // 为了同步时序此时已经开始执行(时间太长可修改此值)
 					{
 						PID_Control2(Take_Up.motor.Angle_DEG, Angle.target_angle, &Take_Up.pos_pid);
 						PID_Control2(Take_Up.motor.Speed, Take_Up.pos_pid.pid_out, &Take_Up.vel_pid);
@@ -99,7 +99,7 @@ while(1)
 					}
             break;
 					case BALL_HIT:
-					if ((now - state_start) < pdMS_TO_TICKS(time_c)) // 轨迹时间
+					if ((now - state_start) < pdMS_TO_TICKS(time_do)) // 依旧执行动作
 					{
 						if(send_symbol == 1)
 						{				 
@@ -108,7 +108,7 @@ while(1)
 						}
 					PID_Control2(Take_Up.motor.Angle_DEG, Angle.target_angle, &Take_Up.pos_pid);
 					PID_Control2(Take_Up.motor.Speed, Take_Up.pos_pid.pid_out, &Take_Up.vel_pid);
-						
+					
 					motorCurrentBuf[2]=(int16_t)Take_Up.vel_pid.pid_out;
 					MotorSend(&hcan1, 0x200, motorCurrentBuf);		
 					}
@@ -152,22 +152,19 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 	{
 		uint8_t Recv[8] = {0};
 
-    if (hcan->Instance == CAN1)
-    {
-			uint32_t ID = CAN_Receive_DataFrame(&hcan1, Recv);
-					
-				if(ID == 0x01) 
-				{
-					RobStrideRecv_Handle(&R_left, &hcan1, ID, Recv);
-				}
-				else if(ID == 0x02)
-				{
-				  RobStrideRecv_Handle(&R_right, &hcan1, ID, Recv);
-				}
-				else if(ID == 0x203)
-				{
-			  int c =	Motor3508Recv(&Take_Up, &hcan1, ID, Recv);
-				}
-			}
+		uint32_t ID = CAN_Receive_DataFrame(&hcan1, Recv);
+				
+		if(ID == 0x01) 
+		{
+			RobStrideRecv_Handle(&R_left, &hcan1, ID, Recv);
+		}
+		else if(ID == 0x02)
+		{
+			RobStrideRecv_Handle(&R_right, &hcan1, ID, Recv);
+		}
+		else if(ID == 0x203)
+		{
+		int c =	Motor3508Recv(&Take_Up, &hcan1, ID, Recv);
 		}
 	}
+}
