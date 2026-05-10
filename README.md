@@ -1,4 +1,4 @@
-# 🚀 Robocon 2026 排球机器人 —— 双板击球系统（上板）
+# 🚀 Robocon 2026 排球机器人 —— 发球上版 + 击球系统
 
 ![Platform](https://img.shields.io/badge/platform-STM32F407-blue)
 ![RTOS](https://img.shields.io/badge/RTOS-FreeRTOS-orange)
