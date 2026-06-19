@@ -21,12 +21,20 @@ typedef struct
 	float kd;
 }RobStride_Reset;
 
+typedef struct
+{
+  float torque;
+	float angle;
+	float omega;
+	float kp;
+	float kd;
+}RobStride_Stop;
 // 状态机
-typedef enum {
-    READY = 0,//等待
-    ALIGN,//复位
-    FIRE, //击球
-    PLAN  //轨迹开始规划
+typedef enum {	
+	PLAN = 0,  //轨迹开始规划
+	READY,//等待
+	FIRE, //击球
+	ALIGN,//复位
 } IFState;
 
 
